@@ -11,5 +11,7 @@
 //! re-export block lands in `lib.rs` (P-RAD-1.13).
 
 mod error;
+mod event;
 
 pub use error::{Error, Result};
+pub use event::{Event, Side};
