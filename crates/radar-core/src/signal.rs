@@ -102,12 +102,23 @@ mod tests {
 
     #[test]
     fn key_formats_kind_and_params() {
-        let s = Signal { kind: SignalKind::OiDelta, params: vec![20.0, 0.1], weight: 2.0 };
+        let s = Signal {
+            kind: SignalKind::OiDelta,
+            params: vec![20.0, 0.1],
+            weight: 2.0,
+        };
         assert_eq!(s.key(), "oi_delta(20,0.1)");
-        let f = Signal { kind: SignalKind::FundingFlip, params: vec![0.0005], weight: 1.0 };
+        let f = Signal {
+            kind: SignalKind::FundingFlip,
+            params: vec![0.0005],
+            weight: 1.0,
+        };
         assert_eq!(f.key(), "funding_flip(0.0005)");
-        let d =
-            Signal { kind: SignalKind::OiPriceDivergence, params: vec![20.0, 0.1], weight: 3.0 };
+        let d = Signal {
+            kind: SignalKind::OiPriceDivergence,
+            params: vec![20.0, 0.1],
+            weight: 3.0,
+        };
         assert_eq!(d.key(), "oi_price_divergence(20,0.1)");
     }
 
@@ -127,7 +138,8 @@ mod tests {
 
     #[test]
     fn signal_json_round_trip_defaults_weight() {
-        let s: Signal = serde_json::from_str(r#"{"kind":"funding_flip","params":[0.0005]}"#).unwrap();
+        let s: Signal =
+            serde_json::from_str(r#"{"kind":"funding_flip","params":[0.0005]}"#).unwrap();
         assert!((s.weight - 1.0).abs() < f64::EPSILON);
         assert_eq!(s.kind, SignalKind::FundingFlip);
     }
