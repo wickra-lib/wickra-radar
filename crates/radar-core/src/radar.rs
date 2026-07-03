@@ -261,4 +261,30 @@ mod tests {
         let out = r.command_json(new_spec).unwrap();
         assert!(out.contains(r#""ok":true"#));
     }
+
+    #[test]
+    fn set_spec_with_wrong_arity_returns_error_json() {
+        let mut r = Radar::new(SPEC).unwrap();
+        // funding_flip takes exactly one parameter; two fails validation in-band.
+        let bad =
+            r#"{"cmd":"set_spec","spec":{"signals":[{"kind":"funding_flip","params":[0.1,0.2]}]}}"#;
+        let out = r.command_json(bad).unwrap();
+        assert!(out.contains(r#""ok":false"#));
+        assert!(out.contains("parameter"));
+    }
+
+    #[test]
+    fn missing_field_returns_error_json() {
+        let mut r = Radar::new(SPEC).unwrap();
+        // `feed` without an "event" field.
+        let out = r.command_json(r#"{"cmd":"feed","symbol":"AAA"}"#).unwrap();
+        assert!(out.contains(r#""ok":false"#));
+    }
+
+    #[test]
+    fn new_rejects_a_duplicate_signal_key() {
+        // Two identical signals would share a factors key.
+        let dup = r#"{"signals":[{"kind":"funding_flip","params":[0.0005]},{"kind":"funding_flip","params":[0.0005]}]}"#;
+        assert!(Radar::new(dup).is_err());
+    }
 }
