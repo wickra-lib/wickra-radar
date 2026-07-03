@@ -1,0 +1,4 @@
+{
+  "signals": [{"kind": "oi_price_divergence", "params": [2.0, 0.1]}],
+  "threshold": 0.0
+}
