@@ -14,14 +14,15 @@ mod aggregate;
 mod error;
 mod event;
 mod indicator_set;
+mod scan;
 mod signal;
 mod spec;
 mod symbol_state;
 mod universe;
 
-pub use aggregate::severity;
 pub use error::{Error, Result};
 pub use event::{Event, Side};
+pub use scan::{scan, RadarAlert, RadarReport};
 pub use signal::{Signal, SignalKind};
 pub use spec::RadarSpec;
 pub use symbol_state::SymbolState;
