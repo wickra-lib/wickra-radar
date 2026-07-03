@@ -26,9 +26,25 @@ cargo bench -p radar-bench
 
 ## Results
 
-_To be filled in from the criterion run in the test-rigor / docs phase._ Figures
-will be the median estimate on a single machine; treat them as orders of
-magnitude, not guarantees — they vary with CPU and toolchain.
+Measured on one developer machine (release build, `parallel` feature), median
+criterion estimates. Treat these as orders of magnitude, not guarantees — they
+vary with CPU and toolchain.
+
+A full batch `scan` with the composite spec (all five signals) over a synthetic
+universe:
+
+| Universe     | 16 events/perp | 64 events/perp |
+|--------------|---------------:|---------------:|
+| 100 perps    |       ~0.43 ms |       ~0.45 ms |
+| 1,000 perps  |        ~3.7 ms |        ~3.8 ms |
+| 10,000 perps |         ~37 ms |         ~40 ms |
+
+The scan is **roughly linear in the number of symbols** — 10× the universe is
+about 10× the time — because each symbol folds independently. It is nearly flat
+across events-per-perp: each signal reads a small fixed window, so most of the
+per-symbol cost is fixed overhead rather than proportional to the stream length.
+At 10,000 perps × 64 events (640k events) a full five-signal scan runs in ~40 ms —
+on the order of 16M events/second.
 
 ## Caveats
 
