@@ -1,0 +1,4 @@
+useDynLib(wickraradar, .registration = TRUE, .fixes = "C_")
+export(wkradar_version)
+export(wkradar_new)
+export(wkradar_command)
