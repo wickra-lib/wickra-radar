@@ -87,16 +87,30 @@ mod tests {
     use crate::signal::SignalKind;
 
     fn sig(kind: SignalKind, params: Vec<f64>, weight: f64) -> Signal {
-        Signal { kind, params, weight }
+        Signal {
+            kind,
+            params,
+            weight,
+        }
     }
 
     fn spec_with(signals: Vec<Signal>, threshold: f64, limit: Option<usize>) -> RadarSpec {
-        RadarSpec { venues: vec![], symbols: vec![], signals, threshold, limit }
+        RadarSpec {
+            venues: vec![],
+            symbols: vec![],
+            signals,
+            threshold,
+            limit,
+        }
     }
 
     #[test]
     fn valid_spec_passes() {
-        let spec = spec_with(vec![sig(SignalKind::OiDelta, vec![20.0, 0.1], 2.0)], 0.4, Some(50));
+        let spec = spec_with(
+            vec![sig(SignalKind::OiDelta, vec![20.0, 0.1], 2.0)],
+            0.4,
+            Some(50),
+        );
         assert!(spec.validate().is_ok());
     }
 
@@ -113,21 +127,37 @@ mod tests {
 
     #[test]
     fn negative_or_nonfinite_weight_rejected() {
-        let neg = spec_with(vec![sig(SignalKind::FundingFlip, vec![0.0005], -1.0)], 0.0, None);
+        let neg = spec_with(
+            vec![sig(SignalKind::FundingFlip, vec![0.0005], -1.0)],
+            0.0,
+            None,
+        );
         assert!(neg.validate().is_err());
-        let nan = spec_with(vec![sig(SignalKind::FundingFlip, vec![0.0005], f64::NAN)], 0.0, None);
+        let nan = spec_with(
+            vec![sig(SignalKind::FundingFlip, vec![0.0005], f64::NAN)],
+            0.0,
+            None,
+        );
         assert!(nan.validate().is_err());
     }
 
     #[test]
     fn nonfinite_threshold_rejected() {
-        let spec = spec_with(vec![sig(SignalKind::FundingFlip, vec![0.0005], 1.0)], f64::INFINITY, None);
+        let spec = spec_with(
+            vec![sig(SignalKind::FundingFlip, vec![0.0005], 1.0)],
+            f64::INFINITY,
+            None,
+        );
         assert!(spec.validate().is_err());
     }
 
     #[test]
     fn zero_limit_rejected() {
-        let spec = spec_with(vec![sig(SignalKind::FundingFlip, vec![0.0005], 1.0)], 0.0, Some(0));
+        let spec = spec_with(
+            vec![sig(SignalKind::FundingFlip, vec![0.0005], 1.0)],
+            0.0,
+            Some(0),
+        );
         assert!(spec.validate().is_err());
     }
 
