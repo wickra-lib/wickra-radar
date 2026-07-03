@@ -15,7 +15,7 @@
 
 [workspace]
 resolver = "2"
-members = ["crates/radar-core", "crates/radar-cli"]
+members = ["crates/radar-core", "crates/radar-cli", "bindings/c"]
 # The fuzz crate is its own (detached) workspace — cargo-fuzz builds it on a
 # nightly toolchain with sanitizer flags.
 exclude = ["fuzz"]
