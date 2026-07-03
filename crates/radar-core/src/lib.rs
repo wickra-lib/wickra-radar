@@ -13,7 +13,9 @@
 mod error;
 mod event;
 mod signal;
+mod spec;
 
 pub use error::{Error, Result};
 pub use event::{Event, Side};
 pub use signal::{Signal, SignalKind};
+pub use spec::RadarSpec;
