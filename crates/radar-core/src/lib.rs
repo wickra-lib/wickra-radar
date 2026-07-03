@@ -9,3 +9,7 @@
 //!
 //! The public surface is assembled module by module through P-RAD-1; the final
 //! re-export block lands in `lib.rs` (P-RAD-1.13).
+
+mod error;
+
+pub use error::{Error, Result};
