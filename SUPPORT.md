@@ -1,0 +1,31 @@
+# Support
+
+Thanks for using `wickra-radar`. Here is where to go for help.
+
+## Questions and usage help
+
+- Read the [README](README.md) and the [contributing guide](CONTRIBUTING.md).
+  The architecture, signal and indicator guides live under `docs/` and the
+  runnable per-language examples under `examples/` (added during the build-out).
+- Open a [GitHub Discussion](https://github.com/wickra-lib/wickra-radar/discussions)
+  for questions and ideas.
+
+## Bugs and feature requests
+
+Open a [GitHub issue](https://github.com/wickra-lib/wickra-radar/issues) using
+the bug-report or feature-request template. Please include the version, the
+binding/language you used, a minimal `RadarSpec` and a small sample event
+stream, and the expected vs actual alert.
+
+## Security
+
+Do **not** open a public issue for security problems. Report privately to
+**support@wickra.org** or via GitHub private vulnerability reporting — see
+[SECURITY.md](SECURITY.md).
+
+## Note
+
+`wickra-radar` is a research and engineering tool: it computes early-warning
+signals over market data and places no orders. It is not financial advice and
+comes with no warranty — review the code and validate results before relying on
+them.
