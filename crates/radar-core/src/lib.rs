@@ -16,9 +16,11 @@ mod indicator_set;
 mod signal;
 mod spec;
 mod symbol_state;
+mod universe;
 
 pub use error::{Error, Result};
 pub use event::{Event, Side};
 pub use signal::{Signal, SignalKind};
 pub use spec::RadarSpec;
 pub use symbol_state::SymbolState;
+pub use universe::Universe;
