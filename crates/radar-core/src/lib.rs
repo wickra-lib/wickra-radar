@@ -12,6 +12,7 @@
 
 mod error;
 mod event;
+mod indicator_set;
 mod signal;
 mod spec;
 
