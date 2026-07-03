@@ -1,0 +1,26 @@
+[package]
+name = "wickra-radar"
+description = "Reference command-line radar over the Wickra radar-core: load a spec and a perp event stream, scan for cascade signals, print the report as text or JSON."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "wickra-radar"
+path = "src/main.rs"
+
+[dependencies]
+# The data-driven radar core.
+radar-core.workspace = true
+serde_json.workspace = true
+clap.workspace = true
