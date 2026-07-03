@@ -12,6 +12,8 @@
 
 mod error;
 mod event;
+mod signal;
 
 pub use error::{Error, Result};
 pub use event::{Event, Side};
+pub use signal::{Signal, SignalKind};
