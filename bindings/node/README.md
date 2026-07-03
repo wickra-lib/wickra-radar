@@ -2,8 +2,8 @@
 
 Node.js bindings for
 [`radar-core`](https://github.com/wickra-lib/wickra-radar), built with
-[napi-rs]. The surface mirrors every other Wickra binding: build an `Radar` from
-a spec JSON, drive it with command JSONs, and read back render frames.
+[napi-rs]. The surface mirrors every other Wickra binding: build a `Radar` from
+a spec JSON, drive it with command JSONs, and read back the report.
 
 ## Install
 
@@ -20,25 +20,29 @@ dependency for your platform.
 const { Radar } = require("wickra-radar");
 
 const spec = JSON.stringify({
-  dataset_ref: "mini", symbol: "AAA",
-  panels: [{ kind: "footprint", price_bin: 1.0, bucket_ms: 60000 }],
+  symbols: ["AAA"],
+  signals: [{ kind: "funding_flip", params: [0.0005] }],
+  threshold: 0.0,
 });
 
 const radar = new Radar(spec);
-radar.command(JSON.stringify({ cmd: "load", dataset: {
-  trades: [{ ts: 1000, price: 100.4, qty: 2.0, side: "buy" }],
-}}));
-const frame = JSON.parse(radar.command(JSON.stringify({ cmd: "frame" })));
-console.log(frame.symbol, frame.cursor_ts);
+const report = JSON.parse(radar.command(JSON.stringify({ cmd: "scan", events: {
+  AAA: [
+    { kind: "derivatives", ts: 1, open_interest: 1.0, funding_rate: 0.0003, mark_price: 50.0 },
+    { kind: "derivatives", ts: 2, open_interest: 1.0, funding_rate: -0.0004, mark_price: 50.0 },
+  ],
+}})));
+console.log(report.scanned, report.alerts[0].symbol); // 1 AAA
 ```
 
 ## Surface
 
 - **`new Radar(spec_json)`** builds a radar from a spec JSON (`""` or `"{}"` for
   an empty handle whose spec is set later). Throws on a malformed spec.
-- **`radar.command(cmd_json)`** applies a command JSON (`set_spec`, `load`,
-  `frame`, `frame_at`, `bounds`, `reset`, `version`) and returns the response
-  JSON. Domain errors come back in-band as `{"ok":false,"error":...}`.
+- **`radar.command(cmd_json)`** applies a command JSON (`set_spec`, `feed`,
+  `feed_batch`, `scan`, `alerts`, `reset`, `version`) and returns the response
+  JSON — a `RadarReport` for `scan`/`alerts`. Domain errors come back in-band as
+  `{"ok":false,"error":...}`.
 - **`radar.version()` / `version()`** return the library version.
 
 ## Build from source
