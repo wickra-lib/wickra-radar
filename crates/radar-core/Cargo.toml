@@ -1,0 +1,46 @@
+[package]
+name = "radar-core"
+description = "Data-driven core of the Wickra Radar: a serde RadarSpec folded over a perp universe (open interest, funding, order-book and liquidation events) into a RadarAlert, scoring five cascade signals and aggregating them with weights."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# `parallel` scans symbols concurrently with rayon; it is on by default. The
+# wasm binding builds with --no-default-features for a sequential scan that is
+# byte-identical to the parallel one. `live` pulls the exchange facade to adapt
+# a live perp feed into events (native-only).
+default = ["parallel"]
+parallel = ["dep:rayon"]
+live = ["dep:wickra-exchange"]
+
+[dependencies]
+# The data-driven boundary (spec / command / alert as JSON). The five MVP signals
+# are pure window reductions of the raw event streams (OI delta, funding flip,
+# book imbalance, liquidation cluster, OI/price divergence), so no wickra-core
+# indicator registry is pulled in (see src/indicator_set.rs); those deps return
+# with the first indicator-backed signal.
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+thiserror.workspace = true
+# Data-parallel per-symbol scan; optional (the `parallel` feature).
+rayon = { workspace = true, optional = true }
+# The native exchange facade for a live perp feed; optional (`live`). Event field
+# names mirror wickra-exchange's derivative / order-book / liquidation streams.
+wickra-exchange = { workspace = true, optional = true }
+
+[dev-dependencies]
+proptest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
