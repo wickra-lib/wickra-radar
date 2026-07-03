@@ -47,36 +47,48 @@ pub struct RadarReport {
 pub fn scan(events: &BTreeMap<String, Vec<Event>>, spec: &RadarSpec) -> Result<RadarReport> {
     spec.validate()?;
     let scanned = events.len();
-
     let states = fold_symbols(events, spec);
+    Ok(report_from_states(
+        states.iter().map(|(sym, state)| (sym.as_str(), state)),
+        spec,
+        scanned,
+    ))
+}
 
+/// Build a sorted, limited report from already-folded per-symbol states.
+///
+/// Shared by the batch [`scan`] and the streaming `Radar::alerts` so both
+/// produce an identical report (§6.6): severity aggregation, the threshold
+/// filter, the total-order sort (severity descending, symbol ascending) and the
+/// optional limit.
+pub(crate) fn report_from_states<'a>(
+    states: impl Iterator<Item = (&'a str, &'a SymbolState)>,
+    spec: &RadarSpec,
+    scanned: usize,
+) -> RadarReport {
     let mut alerts = Vec::new();
-    for (symbol, state) in &states {
+    for (symbol, state) in states {
         let (sev, factors) = severity(state, spec);
         if sev >= spec.threshold {
             alerts.push(RadarAlert {
-                symbol: symbol.clone(),
+                symbol: symbol.to_string(),
                 severity: sev,
                 factors,
                 ts: state.last_ts(),
             });
         }
     }
-
-    // Total order: severity descending, ties broken by symbol ascending.
-    // `total_cmp` gives a total order over f64 (scores are finite anyway), so
-    // the result is deterministic regardless of the fold order.
+    // `total_cmp` gives a total order over f64 (scores are finite anyway), so the
+    // result is deterministic regardless of the fold order.
     alerts.sort_by(|a, b| {
         b.severity
             .total_cmp(&a.severity)
             .then_with(|| a.symbol.cmp(&b.symbol))
     });
-
     if let Some(limit) = spec.limit {
         alerts.truncate(limit);
     }
-
-    Ok(RadarReport { alerts, scanned })
+    RadarReport { alerts, scanned }
 }
 
 /// Fold every event onto a fresh `SymbolState`.

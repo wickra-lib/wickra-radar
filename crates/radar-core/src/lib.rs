@@ -14,6 +14,7 @@ mod aggregate;
 mod error;
 mod event;
 mod indicator_set;
+mod radar;
 mod scan;
 mod signal;
 mod spec;
@@ -22,8 +23,7 @@ mod universe;
 
 pub use error::{Error, Result};
 pub use event::{Event, Side};
+pub use radar::Radar;
 pub use scan::{scan, RadarAlert, RadarReport};
 pub use signal::{Signal, SignalKind};
 pub use spec::RadarSpec;
-pub use symbol_state::SymbolState;
-pub use universe::Universe;
