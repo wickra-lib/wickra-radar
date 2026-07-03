@@ -2646,6 +2646,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "wickra-radar-example"
+version = "0.1.0"
+dependencies = [
+ "radar-core",
+ "serde_json",
+]
+
+[[package]]
 name = "wickra-radar-node"
 version = "0.1.0"
 dependencies = [
