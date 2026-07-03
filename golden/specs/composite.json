@@ -1,0 +1,11 @@
+{
+  "signals": [
+    {"kind": "oi_delta", "params": [2.0, 0.1], "weight": 1.0},
+    {"kind": "funding_flip", "params": [0.0005], "weight": 2.0},
+    {"kind": "book_imbalance", "params": [1.0], "weight": 1.0},
+    {"kind": "liq_cluster", "params": [5.0, 30.0], "weight": 1.5},
+    {"kind": "oi_price_divergence", "params": [2.0, 0.1], "weight": 3.0}
+  ],
+  "threshold": 0.2,
+  "limit": 3
+}

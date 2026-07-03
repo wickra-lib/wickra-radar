@@ -1,0 +1,4 @@
+{
+  "signals": [{"kind": "funding_flip", "params": [0.0005]}],
+  "threshold": 0.0
+}

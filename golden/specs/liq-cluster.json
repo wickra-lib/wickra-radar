@@ -1,0 +1,4 @@
+{
+  "signals": [{"kind": "liq_cluster", "params": [5.0, 30.0]}],
+  "threshold": 0.0
+}

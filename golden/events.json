@@ -1,0 +1,27 @@
+{
+  "BTCUSDT": [
+    {"kind": "derivatives", "ts": 1, "open_interest": 100.0, "funding_rate": 0.0001, "mark_price": 60000.0},
+    {"kind": "derivatives", "ts": 2, "open_interest": 110.0, "funding_rate": 0.0001, "mark_price": 60300.0},
+    {"kind": "derivatives", "ts": 3, "open_interest": 120.0, "funding_rate": 0.0001, "mark_price": 60600.0},
+    {"kind": "orderbook", "ts": 3, "bid_volume": 1000.0, "ask_volume": 1000.0, "best_bid": 60590.0, "best_ask": 60610.0}
+  ],
+  "ETHUSDT": [
+    {"kind": "derivatives", "ts": 1, "open_interest": 50.0, "funding_rate": 0.0003, "mark_price": 3000.0},
+    {"kind": "derivatives", "ts": 2, "open_interest": 50.0, "funding_rate": -0.0004, "mark_price": 3000.0},
+    {"kind": "orderbook", "ts": 2, "bid_volume": 800.0, "ask_volume": 1200.0, "best_bid": 2999.0, "best_ask": 3001.0}
+  ],
+  "SOLUSDT": [
+    {"kind": "derivatives", "ts": 1, "open_interest": 200.0, "funding_rate": 0.0001, "mark_price": 150.0},
+    {"kind": "derivatives", "ts": 2, "open_interest": 210.0, "funding_rate": 0.0001, "mark_price": 142.5},
+    {"kind": "derivatives", "ts": 3, "open_interest": 220.0, "funding_rate": 0.0001, "mark_price": 135.0}
+  ],
+  "DOGEUSDT": [
+    {"kind": "derivatives", "ts": 1, "open_interest": 5000.0, "funding_rate": 0.0002, "mark_price": 0.12},
+    {"kind": "liquidation", "ts": 2, "side": "sell", "qty": 10.0, "price": 0.12},
+    {"kind": "liquidation", "ts": 3, "side": "buy", "qty": 15.0, "price": 0.118}
+  ],
+  "XRPUSDT": [
+    {"kind": "derivatives", "ts": 1, "open_interest": 900.0, "funding_rate": 0.00005, "mark_price": 0.5},
+    {"kind": "orderbook", "ts": 2, "bid_volume": 300.0, "ask_volume": 1700.0, "best_bid": 0.499, "best_ask": 0.501}
+  ]
+}
