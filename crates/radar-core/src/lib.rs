@@ -11,6 +11,7 @@
 //! re-export block lands in `lib.rs` (P-RAD-1.13).
 
 mod aggregate;
+mod config;
 mod error;
 mod event;
 mod indicator_set;
@@ -21,6 +22,7 @@ mod spec;
 mod symbol_state;
 mod universe;
 
+pub use config::Config;
 pub use error::{Error, Result};
 pub use event::{Event, Side};
 pub use radar::Radar;
