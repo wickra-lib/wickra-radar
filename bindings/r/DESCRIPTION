@@ -1,0 +1,16 @@
+Package: wickraradar
+Type: Package
+Title: Data-Driven Liquidation-Cascade Radar Core
+Version: 0.1.0
+Authors@R: person("kingchenc", role = c("aut", "cre"), email = "support@wickra.org")
+Description: R bindings for wickra-radar over its C ABI hub: build a Radar from a
+    spec JSON, drive it with command JSON and read back a report of alerts - the
+    same protocol as the CLI and every other binding.
+License: MIT + file LICENSE | Apache License 2.0
+URL: https://github.com/wickra-lib/wickra-radar
+BugReports: https://github.com/wickra-lib/wickra-radar/issues
+Encoding: UTF-8
+NeedsCompilation: yes
+SystemRequirements: the wickra-radar C ABI shared library (WKRADAR_LIB) and its
+    header (WKRADAR_INC).
+RoxygenNote: 7.3.2
