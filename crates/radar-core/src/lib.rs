@@ -10,6 +10,7 @@
 //! The public surface is assembled module by module through P-RAD-1; the final
 //! re-export block lands in `lib.rs` (P-RAD-1.13).
 
+mod aggregate;
 mod error;
 mod event;
 mod indicator_set;
@@ -18,6 +19,7 @@ mod spec;
 mod symbol_state;
 mod universe;
 
+pub use aggregate::severity;
 pub use error::{Error, Result};
 pub use event::{Event, Side};
 pub use signal::{Signal, SignalKind};
