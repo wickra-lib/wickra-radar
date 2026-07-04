@@ -1,20 +1,32 @@
+<p align="center">
+  <a href="https://wickra.org"><img src="https://raw.githubusercontent.com/wickra-lib/.github/main/profile/wickra-banner.webp?v=514" alt="Wickra Radar — the liquidation-cascade early-warning radar for Go" width="100%"></a>
+</p>
+
+[![Built on Wickra](https://img.shields.io/badge/built%20on-wickra-3b82f6)](https://github.com/wickra-lib/wickra)
+[![CI](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-radar/ci.svg)](https://github.com/wickra-lib/wickra-radar/actions/workflows/ci.yml)
+[![codecov](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-radar/codecov.svg)](https://codecov.io/gh/wickra-lib/wickra-radar)
+[![Go module](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/go.svg)](https://pkg.go.dev/github.com/wickra-lib/wickra-radar-go)
+[![License: MIT OR Apache-2.0](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-radar/license.svg)](https://github.com/wickra-lib/wickra-radar#license)
+
 # Wickra Radar — Go
 
-Go bindings for the `wickra-radar` data-driven core over its C ABI hub. Build a
-`Radar` from a spec JSON, drive it with command JSON, read back the report — the
-same protocol as every other binding.
+---
+
+**The liquidation-cascade early-warning radar core for Go, over the Wickra C ABI hub via cgo.**
+
+[Wickra Radar](https://github.com/wickra-lib/wickra-radar) scans a universe of perpetuals for funding, open-interest and liquidation signals and aggregates them into an early-warning report. This package is the Go binding: it consumes the C ABI hub through cgo and exposes the `Radar` handle with the same JSON protocol as every other binding.
 
 ## Install
 
-```sh
+Use the published **`wickra-radar-go`** module, which bundles the prebuilt C ABI library
+for every platform, so `go get` + `go build` works with no extra steps (a C
+compiler is still required, as the binding uses cgo):
+
+```bash
 go get github.com/wickra-lib/wickra-radar-go
 ```
 
-The binding is cgo over the C ABI: it needs the prebuilt native library staged
-under `lib/<goos>_<goarch>/` and the header under `include/` (both shipped in the
-release module).
-
-## Usage
+## Quick start
 
 ```go
 package main
@@ -46,18 +58,29 @@ func main() {
 }
 ```
 
-## API
 
-| Function | Description |
-|----------|-------------|
-| `New(specJSON string) (*Radar, error)` | Build a radar from a spec JSON (error on an invalid spec). |
-| `(*Radar).Command(cmdJSON string) (string, error)` | Apply a command JSON, return the response JSON. |
-| `(*Radar).Close()` | Free the handle (a finalizer also frees it). |
-| `Version() string` | The library version. |
+`wickra-radar-go` is generated from this directory by the release pipeline: it mirrors the
+Go sources, the vendored C ABI header (`include/wickra_radar.h`) and the prebuilt
+libraries under `lib/<goos>_<goarch>/`. On Windows the DLL must be discoverable at
+run time (next to the executable or on `PATH`).
 
-Domain errors (a bad spec, an unknown command) come back in-band as
-`{"ok":false,"error":...}` JSON, not as a Go error.
+## Building from this repository (contributors)
+
+This `bindings/go` directory is the development source. To build it directly,
+compile the C ABI hub and stage the library into the per-platform directory cgo
+links against:
+
+```bash
+cargo build -p wickra-radar-c --release
+mkdir -p bindings/go/lib/linux_amd64                    # match your GOOS_GOARCH
+cp target/release/libwickra_radar.so    bindings/go/lib/linux_amd64/   # Linux
+cp target/release/libwickra_radar.dylib bindings/go/lib/darwin_arm64/  # macOS (arm64)
+cp target/release/wickra_radar.dll      bindings/go/lib/windows_amd64/ # Windows
+```
+
+Then, with the library on the loader path, run `go test ./...` from this directory.
 
 ## License
 
-`MIT OR Apache-2.0`.
+Dual-licensed under [MIT](https://github.com/wickra-lib/wickra-radar/blob/main/LICENSE-MIT)
+or [Apache-2.0](https://github.com/wickra-lib/wickra-radar/blob/main/LICENSE-APACHE), at your option.
