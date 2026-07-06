@@ -40,6 +40,11 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup-rust
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          # Publish workflow: restore the cache but never SAVE it, so no cache
+          # entry is written from a release run (zizmor cache-poisoning). A
+          # read-only cache still speeds the build without the poisoning vector.
+          save-if: false
 
       # Idempotent publishing: if the version is already on crates.io we treat
       # that as success so re-runs of the workflow do not fail.
@@ -205,6 +210,11 @@ jobs:
         with:
           targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          # Publish workflow: restore the cache but never SAVE it, so no cache
+          # entry is written from a release run (zizmor cache-poisoning). A
+          # read-only cache still speeds the build without the poisoning vector.
+          save-if: false
       # npm install (not ci): the per-platform optionalDependencies are not yet
       # published, so they are absent from the lock and npm ci would reject it.
       - name: Install Node deps
@@ -356,6 +366,11 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          # Publish workflow: restore the cache but never SAVE it, so no cache
+          # entry is written from a release run (zizmor cache-poisoning). A
+          # read-only cache still speeds the build without the poisoning vector.
+          save-if: false
       - name: Install wasm-pack (latest, via prebuilt binary)
         uses: taiki-e/install-action@8b3c737da4b541bf0fb5a3e0488ff20535badac9 # v2.82.1
         with:
@@ -418,6 +433,11 @@ jobs:
         with:
           targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          # Publish workflow: restore the cache but never SAVE it, so no cache
+          # entry is written from a release run (zizmor cache-poisoning). A
+          # read-only cache still speeds the build without the poisoning vector.
+          save-if: false
       - name: Build the CLI binary
         run: cargo build -p wickra-radar --release --target ${{ matrix.target }}
       - name: Package the binary
@@ -467,6 +487,11 @@ jobs:
         with:
           targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          # Publish workflow: restore the cache but never SAVE it, so no cache
+          # entry is written from a release run (zizmor cache-poisoning). A
+          # read-only cache still speeds the build without the poisoning vector.
+          save-if: false
       - name: Build the C ABI library (cdylib + staticlib)
         run: cargo build -p wickra-radar-c --release --target ${{ matrix.target }}
       - name: Package header + libraries
