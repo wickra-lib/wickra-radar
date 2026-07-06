@@ -24,4 +24,7 @@ exclude = [
     "^https?://pypi\\.org/project/wickra-radar",
     "^https?://www\\.npmjs\\.com/package/wickra-radar",
     "^https?://pkg\\.go\\.dev/github\\.com/wickra-lib/wickra-radar-go",
+    # Valid external doc site, but it rate-limits / times out from GitHub's
+    # runner IPs, flaking the link check. It's a stable URL, so skip it.
+    "^https?://pyo3\\.rs",
 ]
