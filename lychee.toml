@@ -25,4 +25,6 @@ exclude = [
     # Valid external doc site, but it rate-limits / times out from GitHub's
     # runner IPs, flaking the link check. It's a stable URL, so skip it.
     "^https?://pyo3\\.rs",
+    "^https?://www\\.nuget\\.org/packages/Wickra\\.Radar",
+    "^https?://central\\.sonatype\\.com/artifact/org\\.wickra/wickra-radar",
 ]
