@@ -6,7 +6,7 @@
 use std::collections::BTreeMap;
 
 use libfuzzer_sys::fuzz_target;
-use radar_core::{scan, Event, RadarSpec};
+use wickra_radar_core::{scan, Event, RadarSpec};
 use serde::Deserialize;
 
 #[derive(Deserialize)]

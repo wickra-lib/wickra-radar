@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 use std::hint::black_box;
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use radar_core::{scan, Event, RadarSpec, Side, Signal, SignalKind};
+use wickra_radar_core::{scan, Event, RadarSpec, Side, Signal, SignalKind};
 
 /// A synthetic event stream for one perp: `n` events on a varied (non-geometric)
 /// price and open-interest path, mixing derivatives, order-book and liquidation

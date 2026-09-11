@@ -30,7 +30,7 @@ cargo fmt --all
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo clippy --workspace --all-targets --no-default-features -- -D warnings   # WASM path (no rayon)
 cargo test --workspace --all-features
-cargo test -p radar-core --no-default-features                                # sequential == parallel
+cargo test -p wickra-radar-core --no-default-features                                # sequential == parallel
 cargo deny check
 ```
 

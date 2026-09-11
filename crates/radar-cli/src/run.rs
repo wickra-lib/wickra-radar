@@ -6,7 +6,7 @@ use std::fs;
 use std::io::Read;
 use std::path::Path;
 
-use radar_core::{scan, Event, RadarReport, RadarSpec};
+use wickra_radar_core::{scan, Event, RadarReport, RadarSpec};
 
 use crate::args::{Args, Format};
 

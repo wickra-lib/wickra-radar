@@ -33,7 +33,7 @@
 
 > **Part of the [Wickra ecosystem](https://github.com/wickra-lib):** the same data-driven core and ten-language binding surface also power [wickra-exchange](https://github.com/wickra-lib/wickra-exchange), [wickra-backtest](https://github.com/wickra-lib/wickra-backtest), [wickra-terminal](https://github.com/wickra-lib/wickra-terminal) and 20 more — see [the full list](https://github.com/wickra-lib).
 
-Wickra Radar is one data-driven core, [`radar-core`](crates/radar-core): a serde
+Wickra Radar is one data-driven core, [`wickra-radar-core`](crates/radar-core): a serde
 `RadarSpec` is folded over a perp universe — open interest, funding, order-book
 and liquidation events — into a `RadarReport` of severity-scored `RadarAlert`s.
 Each symbol runs a handful of O(1) streaming signals; the per-signal scores are

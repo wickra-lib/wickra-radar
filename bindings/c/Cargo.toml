@@ -38,4 +38,4 @@ cast_possible_wrap = "allow"
 similar_names = "allow"
 
 [dependencies]
-radar-core = { workspace = true }
+wickra-radar-core = { workspace = true }

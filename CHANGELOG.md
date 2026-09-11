@@ -7,9 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The core crate carried a name the release could not upload.**
+  `radar-core` is outside the org's crates.io token scope, which
+  creates new crates under the `wickra-` prefix only; `cargo publish` on it
+  returns 403 at upload while `--dry-run` passes, and because the publish jobs
+  run in parallel the release would have landed on PyPI, npm, NuGet, Maven
+  Central and the Go mirror without ever reaching crates.io. The core is now
+  `wickra-radar-core`, the shape of every released sibling. The
+  directory keeps its name; only the package and the
+  `wickra_radar_core` path moved. The same audit ran across the family
+  (xray paid for this with its first tag).
+
 ### Added
 
-- The `radar-core` data-driven core: `RadarSpec` (JSON/TOML), the three input
+- The `wickra-radar-core` data-driven core: `RadarSpec` (JSON/TOML), the three input
   event kinds (derivatives, order-book, liquidation), the five cascade signals
   (open-interest delta, funding flip, book imbalance, liquidation cluster,
   OI/price divergence), the weighted-mean `severity` aggregation with a

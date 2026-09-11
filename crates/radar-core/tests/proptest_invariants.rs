@@ -12,7 +12,7 @@
 use std::collections::BTreeMap;
 
 use proptest::prelude::*;
-use radar_core::{scan, Event, RadarSpec, Side, Signal, SignalKind};
+use wickra_radar_core::{scan, Event, RadarSpec, Side, Signal, SignalKind};
 
 fn arb_ts() -> impl Strategy<Value = i64> {
     0i64..100_000

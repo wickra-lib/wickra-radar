@@ -10,8 +10,8 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use radar_core::Radar;
 use serde_json::Value;
+use wickra_radar_core::Radar;
 
 /// The repository-root `golden/` directory, resolved from this crate's manifest.
 fn golden_dir() -> PathBuf {

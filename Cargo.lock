@@ -1548,20 +1548,7 @@ name = "radar-bench"
 version = "0.1.0"
 dependencies = [
  "criterion",
- "radar-core",
-]
-
-[[package]]
-name = "radar-core"
-version = "0.1.0"
-dependencies = [
- "proptest",
- "rayon",
- "serde",
- "serde_json",
- "thiserror",
- "toml",
- "wickra-exchange",
+ "wickra-radar-core",
 ]
 
 [[package]]
@@ -2680,23 +2667,36 @@ name = "wickra-radar"
 version = "0.1.0"
 dependencies = [
  "clap",
- "radar-core",
  "serde_json",
+ "wickra-radar-core",
 ]
 
 [[package]]
 name = "wickra-radar-c"
 version = "0.1.0"
 dependencies = [
- "radar-core",
+ "wickra-radar-core",
+]
+
+[[package]]
+name = "wickra-radar-core"
+version = "0.1.0"
+dependencies = [
+ "proptest",
+ "rayon",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "toml",
+ "wickra-exchange",
 ]
 
 [[package]]
 name = "wickra-radar-example"
 version = "0.1.0"
 dependencies = [
- "radar-core",
  "serde_json",
+ "wickra-radar-core",
 ]
 
 [[package]]
@@ -2706,7 +2706,7 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "radar-core",
+ "wickra-radar-core",
 ]
 
 [[package]]
@@ -2714,15 +2714,15 @@ name = "wickra-radar-python"
 version = "0.1.0"
 dependencies = [
  "pyo3",
- "radar-core",
+ "wickra-radar-core",
 ]
 
 [[package]]
 name = "wickra-radar-wasm"
 version = "0.1.0"
 dependencies = [
- "radar-core",
  "wasm-bindgen",
+ "wickra-radar-core",
 ]
 
 [[package]]

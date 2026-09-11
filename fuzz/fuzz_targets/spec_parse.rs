@@ -4,7 +4,7 @@
 //! surface as a clean `Err`.
 
 use libfuzzer_sys::fuzz_target;
-use radar_core::{Config, RadarSpec};
+use wickra_radar_core::{Config, RadarSpec};
 
 fuzz_target!(|data: &[u8]| {
     let Ok(text) = std::str::from_utf8(data) else {

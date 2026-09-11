@@ -26,7 +26,7 @@ use core::ffi::{c_char, CStr};
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::ptr;
 
-use radar_core::Radar;
+use wickra_radar_core::Radar;
 
 /// A required pointer argument (`handle` or `cmd_json`) was null.
 pub const WICKRA_RADAR_ERR_NULL: i32 = -1;

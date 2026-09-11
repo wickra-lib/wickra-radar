@@ -27,7 +27,7 @@ env:
 
 jobs:
   # --------------------------------------------------------------------------
-  # crates.io: radar-core then the wickra-radar crate (CLI binary)
+  # crates.io: wickra-radar-core then the wickra-radar crate (CLI binary)
   # --------------------------------------------------------------------------
   cargo-publish:
     name: Publish to crates.io
@@ -48,9 +48,9 @@ jobs:
 
       # Idempotent publishing: if the version is already on crates.io we treat
       # that as success so re-runs of the workflow do not fail.
-      - name: Publish radar-core (idempotent)
+      - name: Publish wickra-radar-core (idempotent)
         run: |
-          out=$(cargo publish -p radar-core --token "$CARGO_REGISTRY_TOKEN" 2>&1) && echo "$out" \
+          out=$(cargo publish -p wickra-radar-core --token "$CARGO_REGISTRY_TOKEN" 2>&1) && echo "$out" \
             || (echo "$out" | grep -q "already uploaded\|already exists" && echo "skip: already published" \
                 || (echo "$out"; exit 1))
         env:
@@ -70,7 +70,7 @@ jobs:
       # Produce .crate files for the GitHub Release attachments.
       - name: Build .crate files for release attachment
         run: |
-          cargo package -p radar-core
+          cargo package -p wickra-radar-core
           cargo package -p wickra-radar
 
       - name: Upload .crate files
@@ -89,7 +89,7 @@ jobs:
         run: |
           cargo cyclonedx --format json --top-level
           mkdir -p sboms
-          cp crates/radar-core/radar-core.cdx.json sboms/
+          cp crates/radar-core/wickra-radar-core.cdx.json sboms/
           cp crates/radar-cli/wickra-radar.cdx.json sboms/
           ls -lh sboms/
 
@@ -128,7 +128,7 @@ jobs:
       - name: Sync root README into bindings/python so it ships with the wheel
         shell: bash
         run: cp README.md bindings/python/README.md
-      # The Python binding depends only on radar-core without the `live`
+      # The Python binding depends only on wickra-radar-core without the `live`
       # feature (no native networking), so the manylinux/musllinux containers
       # build the wheel with no extra system dependencies.
       - uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0

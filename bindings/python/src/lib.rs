@@ -11,7 +11,7 @@
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 
-use radar_core::Radar;
+use wickra_radar_core::Radar;
 
 /// A radar instance driven by JSON commands.
 ///
@@ -43,7 +43,7 @@ impl PyRadar {
     /// The library version.
     #[staticmethod]
     fn version() -> &'static str {
-        radar_core::version()
+        wickra_radar_core::version()
     }
 }
 

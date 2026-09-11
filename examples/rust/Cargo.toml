@@ -15,5 +15,5 @@ name = "scan"
 path = "src/main.rs"
 
 [dependencies]
-radar-core = { workspace = true }
+wickra-radar-core = { workspace = true }
 serde_json = { workspace = true }
