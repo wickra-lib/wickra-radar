@@ -1,5 +1,5 @@
 [package]
-name = "radar-core"
+name = "wickra-radar-core"
 description = "Data-driven core of the Wickra Radar: a serde RadarSpec folded over a perp universe (open interest, funding, order-book and liquidation events) into a RadarAlert, scoring five cascade signals and aggregating them with weights."
 version.workspace = true
 edition.workspace = true

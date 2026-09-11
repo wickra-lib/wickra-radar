@@ -1,8 +1,8 @@
 //! The `wickra-radar` reference CLI.
 //!
-//! Loads a [`RadarSpec`](radar_core::RadarSpec) and a perp event stream (a
+//! Loads a [`RadarSpec`](wickra_radar_core::RadarSpec) and a perp event stream (a
 //! directory of per-symbol `<SYMBOL>.jsonl` files or a batch JSON on stdin),
-//! scans the universe through `radar-core`, and prints the report as text or
+//! scans the universe through `wickra-radar-core`, and prints the report as text or
 //! JSON. Exits non-zero if the run fails, so scripts and CI can detect an error.
 
 mod args;

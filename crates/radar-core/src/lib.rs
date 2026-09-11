@@ -14,7 +14,7 @@
 //! yield a byte-identical report.
 //!
 //! ```
-//! use radar_core::Radar;
+//! use wickra_radar_core::Radar;
 //! let spec = r#"{"signals":[{"kind":"funding_flip","params":[0.0005]}]}"#;
 //! let mut radar = Radar::new(spec).unwrap();
 //! let reply = radar.command_json(r#"{"cmd":"version"}"#).unwrap();

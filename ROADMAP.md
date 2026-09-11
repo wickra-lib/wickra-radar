@@ -8,7 +8,7 @@ as reviewed, CI-green pull requests. Status below is updated as phases complete.
 
 0. **Scaffold** — workspace, governance, supply-chain config, `.github`
    scaffolding. *In progress.*
-1. **`radar-core`** — the `RadarSpec`, the perp-universe fold (open interest,
+1. **`wickra-radar-core`** — the `RadarSpec`, the perp-universe fold (open interest,
    funding, order-book and liquidation events), the five signals, the weighted
    aggregation into a `RadarAlert`, and both modes (batch `scan` + streaming
    `feed`), with near-total coverage via inline tests.

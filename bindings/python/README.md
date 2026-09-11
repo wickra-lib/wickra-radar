@@ -1,6 +1,6 @@
 # Wickra Radar — Python
 
-Python bindings for [`radar-core`](https://github.com/wickra-lib/wickra-radar),
+Python bindings for [`wickra-radar-core`](https://github.com/wickra-lib/wickra-radar),
 built with [PyO3] and [maturin]. The surface mirrors every other Wickra binding:
 build a `Radar` from a spec JSON, drive it with command JSONs, and read back the
 report.

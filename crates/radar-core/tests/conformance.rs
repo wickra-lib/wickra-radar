@@ -8,7 +8,9 @@ use std::fmt::Debug;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
-use radar_core::{Event, Radar, RadarAlert, RadarReport, RadarSpec, Side, Signal, SignalKind};
+use wickra_radar_core::{
+    Event, Radar, RadarAlert, RadarReport, RadarSpec, Side, Signal, SignalKind,
+};
 
 const SPEC: &str =
     r#"{"symbols":["AAA"],"signals":[{"kind":"funding_flip","params":[0.0005]}],"threshold":0.0}"#;

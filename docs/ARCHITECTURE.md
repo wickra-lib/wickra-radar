@@ -2,7 +2,7 @@
 
 The top-level [ARCHITECTURE.md](../ARCHITECTURE.md) gives the high-level shape;
 this page covers how the core actually turns a spec + an event universe into a
-report. The whole product is **one data-driven core** (`radar-core`) and N thin
+report. The whole product is **one data-driven core** (`wickra-radar-core`) and N thin
 consumers — the CLI and the ten language bindings — each of which only ships a
 spec, feeds events and reads back a report.
 

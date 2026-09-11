@@ -11,7 +11,7 @@
 
 use wasm_bindgen::prelude::*;
 
-use radar_core::Radar as CoreRadar;
+use wickra_radar_core::Radar as CoreRadar;
 
 /// A radar instance driven by JSON commands.
 #[wasm_bindgen]

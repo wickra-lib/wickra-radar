@@ -7,7 +7,7 @@
 
 use std::collections::BTreeMap;
 
-use radar_core::{scan, Event, RadarSpec};
+use wickra_radar_core::{scan, Event, RadarSpec};
 
 const SPEC: &str = r#"{
     "symbols": ["AAA"],
@@ -28,7 +28,7 @@ fn main() {
 
     let report = scan(&events, &spec).expect("scan");
 
-    println!("wickra-radar {}", radar_core::version());
+    println!("wickra-radar {}", wickra_radar_core::version());
     println!(
         "{}",
         serde_json::to_string(&report).expect("serialize report")

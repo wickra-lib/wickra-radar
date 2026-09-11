@@ -12,7 +12,7 @@
 use napi::Result;
 use napi_derive::napi;
 
-use radar_core::Radar as CoreRadar;
+use wickra_radar_core::Radar as CoreRadar;
 
 /// Build a napi error from a message.
 fn err(message: impl Into<String>) -> napi::Error {

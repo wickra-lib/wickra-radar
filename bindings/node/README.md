@@ -1,7 +1,7 @@
 # Wickra Radar — Node.js
 
 Node.js bindings for
-[`radar-core`](https://github.com/wickra-lib/wickra-radar), built with
+[`wickra-radar-core`](https://github.com/wickra-lib/wickra-radar), built with
 [napi-rs]. The surface mirrors every other Wickra binding: build a `Radar` from
 a spec JSON, drive it with command JSONs, and read back the report.
 

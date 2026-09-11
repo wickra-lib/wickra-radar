@@ -5,7 +5,7 @@
 //! `{"ok":false,...}` reply, never a crash.
 
 use libfuzzer_sys::fuzz_target;
-use radar_core::Radar;
+use wickra_radar_core::Radar;
 
 const SPEC: &str = r#"{"signals":[{"kind":"funding_flip","params":[0.0005]},{"kind":"oi_delta","params":[3,0.1]}]}"#;
 
