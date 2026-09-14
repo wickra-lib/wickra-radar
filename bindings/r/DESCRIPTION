@@ -1,7 +1,7 @@
 Package: wickraradar
 Type: Package
 Title: Data-Driven Liquidation-Cascade Radar Core
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("kingchenc", role = c("aut", "cre"), email = "support@wickra.org")
 Description: R bindings for wickra-radar over its C ABI hub: build a Radar from a
     spec JSON, drive it with command JSON and read back a report of alerts - the

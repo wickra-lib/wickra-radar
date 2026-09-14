@@ -50,6 +50,6 @@ is no rpath.
 Every example prints the version and the report, for example:
 
 ```text
-wickra-radar 0.1.0
+wickra-radar 0.1.1
 {"alerts":[{"symbol":"AAA","severity":1.0,"factors":{"funding_flip(0.0005)":1.0,"severity":1.0},"ts":2}],"scanned":1}
 ```
