@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-14
+
 ### Fixed
 
 - **A mutating command through the C ABI executed twice.** `wickra_radar_command`
@@ -103,4 +105,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`deny.toml`, `osv-scanner.toml`, `lychee.toml`), lint configuration
   (`clippy.toml`), `repo-metadata.toml`, and dual `MIT OR Apache-2.0` licensing.
 
-[Unreleased]: https://github.com/wickra-lib/wickra-radar/commits/main
+[Unreleased]: https://github.com/wickra-lib/wickra-radar/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/wickra-lib/wickra-radar/releases/tag/v0.1.0
