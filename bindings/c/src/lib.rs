@@ -17,18 +17,17 @@
 //! Whenever `len < cap` the response is written immediately, so a
 //! sufficiently-large buffer needs only one call.
 //!
-//! **Mutating commands and the response cache.** `feed` and `feed_batch` advance the radar's per-symbol state, so the two-call idiom
-//! must not execute them twice. Each handle therefore caches the response of
-//! the command it last *computed but not yet delivered* (`pending`). A repeated
-//! call with the same command bytes reuses that cached response instead of
-//! re-executing; once the response is successfully written to a buffer, the
-//! cache is cleared so the next identical command executes freshly. A logical
-//! command is thus executed exactly once, no matter how many buffer-sizing
-//! retries it takes.
+//! **Mutating commands and the response cache.** `feed` and `feed_batch`
+//! advance the radar's per-symbol state, so the two-call idiom must not execute
+//! them twice. Each handle therefore caches the response of the command it last
+//! *computed but not yet delivered* (`pending`). A repeated call with the same
+//! command bytes reuses that cached response instead of re-executing; once the
+//! response is successfully written to a buffer, the cache is cleared so the
+//! next identical command executes freshly. A logical command is thus executed
+//! exactly once, no matter how many buffer-sizing retries it takes.
 //!
-//! Negative returns are reserved
-//! for unusable arguments ([`WICKRA_RADAR_ERR_NULL`], [`WICKRA_RADAR_ERR_UTF8`])
-//! and caught panics ([`WICKRA_RADAR_ERR_PANIC`]); a non-negative return is always
+//! Negative returns are reserved for unusable arguments
+//! ([`WICKRA_RADAR_ERR_NULL`], [`WICKRA_RADAR_ERR_UTF8`]) and caught panics ([`WICKRA_RADAR_ERR_PANIC`]); a non-negative return is always
 //! the response length. Domain errors (a bad spec, an unknown command) are *not*
 //! negative — they come back in-band as `{"ok":false,"error":...}` JSON in the
 //! buffer.
