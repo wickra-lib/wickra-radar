@@ -53,6 +53,15 @@ C, C++, C#, Go, Java and R**, with a command-line reference consumer.
 - **Liquidation cluster** — liquidation events bunching in a short window.
 - **OI / price divergence** — open interest rising while price stalls or falls.
 
+```bash
+# Scan a perp universe from a spec + an event batch, raw RadarReport JSON
+# (the same bytes every binding returns):
+cargo run -p wickra-radar -- --spec golden/specs/composite.json --stdin --format json < golden/events.json
+
+# Human-readable table of alerts:
+cargo run -p wickra-radar -- --spec golden/specs/composite.json --stdin < golden/events.json
+```
+
 ## Status
 
 **Pre-release — functionally complete, CI-verified, not yet published.** The core,
@@ -68,15 +77,6 @@ across the full CI matrix (10 languages × 3 OS). Not yet released to any regist
 - [ROADMAP.md](ROADMAP.md) · [BENCHMARKS.md](BENCHMARKS.md) · [THREAT_MODEL.md](THREAT_MODEL.md) · [SECURITY.md](SECURITY.md).
 
 ## Quickstart
-
-```bash
-# Scan a perp universe from a spec + an event batch, raw RadarReport JSON
-# (the same bytes every binding returns):
-cargo run -p wickra-radar -- --spec golden/specs/composite.json --stdin --format json < golden/events.json
-
-# Human-readable table of alerts:
-cargo run -p wickra-radar -- --spec golden/specs/composite.json --stdin < golden/events.json
-```
 
 The `--spec` file is a `RadarSpec`; events are read either from `--stdin` (one
 JSON object `{"SYMBOL":[event, …], …}`) or from `--events <dir>`, a directory of
@@ -149,7 +149,7 @@ fuzz/                 cargo-fuzz targets (spec_parse, command_json, scan)
 examples/             one runnable "scan a universe" example per language
 ```
 
-## Building from source
+## Building everything from source
 
 ```bash
 cargo build --workspace
@@ -159,11 +159,42 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo run -p wickra-radar -- --spec golden/specs/composite.json --stdin --format json < golden/events.json
 ```
 
+Each binding builds from its own directory — see the per-binding READMEs under
+`bindings/`.
+
+## Testing
+
+Run the suites with the commands in
+[Building everything from source](#building-everything-from-source).
+
+- **`wickra-radar-core`** — unit tests per signal, the scoring and aggregation
+  path, the parallel-versus-sequential parity, property tests over the event
+  stream and the command envelope. The golden fixtures in `golden/` are the
+  anchor: the same `(spec, events)` pair must scan to the same report bytes
+  here as in every binding.
+- **Every binding** asserts the *same* golden bytes. That is the whole
+  cross-language claim, so it is checked the same way in each one rather than
+  approximated per language: Python with pytest (and a plain runner on 3.9),
+  Node with `node --test`, WASM through the nodejs build, C and C++ through
+  `ctest`, C# with `dotnet test`, Go with `go test`, Java with JUnit, and R
+  with the shipped `tests/smoke.R` plus the repository's `run_tests.R`.
+- **Examples** — every example under `examples/` runs in CI and is held to the
+  version and the alerts it prints.
+- **Fuzz** — `fuzz/` holds libFuzzer targets over spec parsing, the command
+  envelope and the scan; CI runs each for a short smoke.
+
 ## Requirements
 
-- **Rust** ≥ 1.86 (workspace MSRV; the Node binding needs ≥ 1.88).
-- Binding toolchains as needed: Node ≥ 22, Python ≥ 3.9, a C toolchain, .NET 8,
-  JDK 22+, Go 1.23, R — see each `bindings/<lang>/README.md`.
+- **Rust 1.86+** — the workspace MSRV; the Node binding needs **Rust 1.88**.
+- **Python 3.9+** — the Python binding.
+- **Node 22+** — the Node binding.
+- **Go 1.23+** — the Go binding.
+- **Java 22+** — the Java binding.
+- **R 4.1+** — the R package.
+- **.NET 8+** — the C# binding.
+- A **C11 / C++17** compiler with CMake 3.15+ for the C and C++ examples.
+
+See each `bindings/<lang>/README.md` for the per-language build and install.
 
 ## Benchmarks
 

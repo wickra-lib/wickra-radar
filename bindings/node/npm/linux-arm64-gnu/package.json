@@ -4,7 +4,9 @@
   "description": "Native binding for wickra-radar (Linux arm64 GNU). Installed automatically as an optional dependency of wickra-radar on matching platforms.",
   "main": "wickra-radar.linux-arm64-gnu.node",
   "files": [
-    "wickra-radar.linux-arm64-gnu.node"
+    "wickra-radar.linux-arm64-gnu.node",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
   ],
   "license": "MIT OR Apache-2.0",
   "engines": {

@@ -33,20 +33,20 @@ keywords = ["trading", "liquidation", "perpetuals", "indicators", "finance"]
 categories = ["finance", "command-line-utilities"]
 
 [workspace.dependencies]
-# Wickra ecosystem. wickra-core and wickra-data ship on crates.io. wickra-exchange
-# supplies the live perp derivative feeds (open interest, funding, liquidations,
-# order book) whose event shapes are the radar's `feed` inputs; it is consumed
-# from git until its first crates.io release (its tag is USER-GO gated), with a
-# `version` pinned alongside `git` so the dependency is not a wildcard
-# (cargo-deny's `bans.wildcards = deny`).
-wickra-core = "0.9"
-wickra-data = "0.9"
-wickra-exchange = { git = "https://github.com/wickra-lib/wickra-exchange", version = "0.1" }
-# The only name -> indicator registry in the ecosystem: the backtester's factory
-# resolves any of the 514 indicators by name + params into an object-safe
-# EvalIndicator. Consumed from git until its first crates.io release; a `version`
-# is pinned alongside `git` so it is not a wildcard (cargo-deny bans.wildcards).
-wickra-backtest-core = { git = "https://github.com/wickra-lib/wickra-backtest", version = "0.1" }
+# Wickra ecosystem, every piece from crates.io. wickra-exchange supplies the
+# live perp derivative feeds (open interest, funding, liquidations, order book)
+# whose event shapes are the radar's `feed` inputs, behind the `live` feature.
+#
+# The exchange pin is exact, as the released siblings pin their engines: cargo
+# treats "this git URL" and the registry as different sources, and a caret pin
+# that lands on a newer patch than a sibling's leaves two copies of an engine in
+# one graph -- and two copies do not share a Candle or an event type. Move it
+# with the family. wickra-core and wickra-data follow their released 1.0 line.
+# (wickra-backtest-core was declared here as a git dependency and used by no
+# crate; it is gone rather than pinned.)
+wickra-core = "1.0"
+wickra-data = "1.0"
+wickra-exchange = "=0.1.4"
 # Workspace-internal crate, referenced by the CLI, bench and bindings.
 wickra-radar-core = { version = "0.1.0", path = "crates/radar-core" }
 # Serialization — the data-driven boundary (spec/command/alert as JSON).
@@ -62,7 +62,11 @@ clap = { version = "4", features = ["derive"] }
 # C ABI header generation.
 cbindgen = "0.27"
 # Test/dev.
-criterion = "0.8"
+# codspeed-criterion-compat is a drop-in for criterion: the benches keep their
+# criterion API and run as criterion locally, but under `cargo codspeed` they
+# report measurements instead of merely executing. Without the alias the
+# CodSpeed job runs the benchmarks and uploads nothing, which reads as a pass.
+criterion = { package = "codspeed-criterion-compat", version = "5.0.1" }
 proptest = "1"
 
 [workspace.lints.rust]

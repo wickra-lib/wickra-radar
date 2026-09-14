@@ -45,6 +45,13 @@ the callee never allocates memory the caller must free:
 Whenever `len < cap`, the response is written on that call, so a
 sufficiently-large buffer needs only one call.
 
+A mutating command (`feed`, `feed_batch`, `set_spec`, `reset`) is executed
+exactly once across those calls: the handle caches the response it has computed
+but not yet delivered, and a repeated call with the same command bytes reuses
+it instead of re-executing. Once the response has been written to a buffer the
+cache is cleared, so the next identical command executes freshly. The two-call
+idiom therefore never feeds an event twice.
+
 Return codes:
 
 | Return   | Meaning                                             |
@@ -56,6 +63,14 @@ Return codes:
 
 Domain errors (a bad spec, an unknown command) are **not** negative — they come
 back in-band as `{"ok":false,"error":...}` JSON in the buffer.
+
+## C++
+
+`include/wickra_radar.hpp` is a header-only C++17 hull over the same four
+functions: `wickra::Radar` owns and frees the handle, `command` runs the
+length-out protocol for you, and a negative return becomes a
+`wickra::RadarError`. In-band refusals (`{"ok":false,...}`) are returned as
+strings, not thrown. `examples/c/scan.cpp` builds against it.
 
 ## Header generation
 
