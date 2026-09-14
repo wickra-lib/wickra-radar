@@ -15,7 +15,18 @@
 //!    written into `out`.
 //!
 //! Whenever `len < cap` the response is written immediately, so a
-//! sufficiently-large buffer needs only one call. Negative returns are reserved
+//! sufficiently-large buffer needs only one call.
+//!
+//! **Mutating commands and the response cache.** `feed` and `feed_batch` advance the radar's per-symbol state, so the two-call idiom
+//! must not execute them twice. Each handle therefore caches the response of
+//! the command it last *computed but not yet delivered* (`pending`). A repeated
+//! call with the same command bytes reuses that cached response instead of
+//! re-executing; once the response is successfully written to a buffer, the
+//! cache is cleared so the next identical command executes freshly. A logical
+//! command is thus executed exactly once, no matter how many buffer-sizing
+//! retries it takes.
+//!
+//! Negative returns are reserved
 //! for unusable arguments ([`WICKRA_RADAR_ERR_NULL`], [`WICKRA_RADAR_ERR_UTF8`])
 //! and caught panics ([`WICKRA_RADAR_ERR_PANIC`]); a non-negative return is always
 //! the response length. Domain errors (a bad spec, an unknown command) are *not*
@@ -37,7 +48,12 @@ pub const WICKRA_RADAR_ERR_PANIC: i32 = -3;
 
 /// An opaque handle to a radar instance. Created by [`wickra_radar_new`] and
 /// destroyed by [`wickra_radar_free`]; never dereferenced by the caller.
-pub struct WickraRadar(Radar);
+pub struct WickraRadar {
+    inner: Radar,
+    /// The last command computed but not yet delivered: `(cmd_bytes, response)`.
+    /// See the module docs for the mutating-command cache contract.
+    pending: Option<(Vec<u8>, String)>,
+}
 
 /// Read a NUL-terminated C string as `&str`, or `None` on null / bad UTF-8.
 ///
@@ -64,7 +80,10 @@ pub unsafe extern "C" fn wickra_radar_new(spec_json: *const c_char) -> *mut Wick
         return ptr::null_mut();
     };
     match catch_unwind(AssertUnwindSafe(|| Radar::new(json))) {
-        Ok(Ok(radar)) => Box::into_raw(Box::new(WickraRadar(radar))),
+        Ok(Ok(inner)) => Box::into_raw(Box::new(WickraRadar {
+            inner,
+            pending: None,
+        })),
         _ => ptr::null_mut(),
     }
 }
@@ -88,6 +107,7 @@ pub unsafe extern "C" fn wickra_radar_free(handle: *mut WickraRadar) {
 /// response and a trailing NUL have been written to `out`; otherwise `out` is
 /// left untouched and the caller should re-call with a `cap` of at least
 /// `len + 1`. Pass `out = NULL`, `cap = 0` to query the length without writing.
+/// A mutating command is executed exactly once across all such retries.
 ///
 /// # Safety
 /// `handle` must be a valid handle; `cmd_json` a valid NUL-terminated C string;
@@ -105,27 +125,44 @@ pub unsafe extern "C" fn wickra_radar_command(
     let Some(cmd) = (unsafe { opt_str(cmd_json) }) else {
         return WICKRA_RADAR_ERR_UTF8;
     };
-    let radar = unsafe { &mut (*handle).0 };
-    let response = match catch_unwind(AssertUnwindSafe(|| radar.command_json(cmd))) {
-        // `command_json` folds domain errors into `{"ok":false,...}` JSON, so a
-        // top-level `Err` should not occur; surface it in-band all the same
-        // rather than inventing a new negative code.
-        Ok(result) => result.unwrap_or_else(|err| {
-            format!(
-                "{{\"ok\":false,\"error\":{}}}",
-                json_string(&err.to_string())
-            )
-        }),
-        Err(_) => return WICKRA_RADAR_ERR_PANIC,
-    };
+    let radar = unsafe { &mut *handle };
 
-    let bytes = response.as_bytes();
-    let len = bytes.len();
-    if len < cap && !out.is_null() {
-        unsafe {
-            ptr::copy_nonoverlapping(bytes.as_ptr(), out.cast::<u8>(), len);
-            *out.add(len) = 0;
+    // Reuse the cached response for an identical, not-yet-delivered command;
+    // otherwise execute once and cache the result.
+    let is_retry = matches!(&radar.pending, Some((bytes, _)) if bytes.as_slice() == cmd.as_bytes());
+    if !is_retry {
+        let response = match catch_unwind(AssertUnwindSafe(|| radar.inner.command_json(cmd))) {
+            // `command_json` folds domain errors into `{"ok":false,...}` JSON, so
+            // a top-level `Err` should not occur; surface it in-band all the same
+            // rather than inventing a new negative code.
+            Ok(result) => result.unwrap_or_else(|err| {
+                format!(
+                    "{{\"ok\":false,\"error\":{}}}",
+                    json_string(&err.to_string())
+                )
+            }),
+            Err(_) => return WICKRA_RADAR_ERR_PANIC,
+        };
+        radar.pending = Some((cmd.as_bytes().to_vec(), response));
+    }
+
+    let (len, delivered) = {
+        let response = &radar.pending.as_ref().expect("pending set above").1;
+        let bytes = response.as_bytes();
+        let len = bytes.len();
+        let delivered = len < cap && !out.is_null();
+        if delivered {
+            unsafe {
+                ptr::copy_nonoverlapping(bytes.as_ptr(), out.cast::<u8>(), len);
+                *out.add(len) = 0;
+            }
         }
+        (len, delivered)
+    };
+    // The response has been delivered: clear the cache so the next identical
+    // command executes freshly.
+    if delivered {
+        radar.pending = None;
     }
     i32::try_from(len).unwrap_or(i32::MAX)
 }
@@ -240,6 +277,79 @@ mod tests {
         }
         assert!(read_buf(&buf).contains("\"ok\":false"));
 
+        unsafe { wickra_radar_free(handle) };
+    }
+
+    /// Run a command with a generous buffer and return the response string.
+    fn command(handle: *mut WickraRadar, cmd: &str) -> String {
+        let c = CString::new(cmd).unwrap();
+        let mut buf = vec![0u8; 8192];
+        let len = unsafe {
+            wickra_radar_command(
+                handle,
+                c.as_ptr(),
+                buf.as_mut_ptr().cast::<c_char>(),
+                buf.len(),
+            )
+        };
+        assert!(len >= 0);
+        read_buf(&buf)
+    }
+
+    /// The critical mutating-command test: buffer-sizing retries of a `feed`
+    /// execute it exactly once. A funding sign change from +0.0001 to -0.0003
+    /// scores below saturation on the 0.0005 scale, so the alert list after one
+    /// feed differs from the list after two -- the core driven directly is the
+    /// oracle for both.
+    #[test]
+    fn buffer_retry_does_not_double_feed() {
+        let spec = CString::new(SPEC).unwrap();
+        let handle = unsafe { wickra_radar_new(spec.as_ptr()) };
+        assert!(!handle.is_null());
+        command(
+            handle,
+            r#"{"cmd":"feed","symbol":"BTCUSDT","event":{"kind":"derivatives","ts":1,"open_interest":100.0,"funding_rate":0.0001,"mark_price":60000.0}}"#,
+        );
+        let flip = CString::new(
+            r#"{"cmd":"feed","symbol":"BTCUSDT","event":{"kind":"derivatives","ts":2,"open_interest":100.0,"funding_rate":-0.0003,"mark_price":60000.0}}"#,
+        )
+        .unwrap();
+        // Two length-only calls (cap = 0) then one delivering call -- all one feed.
+        let a = unsafe { wickra_radar_command(handle, flip.as_ptr(), ptr::null_mut(), 0) };
+        let b = unsafe { wickra_radar_command(handle, flip.as_ptr(), ptr::null_mut(), 0) };
+        assert_eq!(a, b);
+        let mut buf = vec![0u8; usize::try_from(a).unwrap() + 1];
+        let c = unsafe {
+            wickra_radar_command(
+                handle,
+                flip.as_ptr(),
+                buf.as_mut_ptr().cast::<c_char>(),
+                buf.len(),
+            )
+        };
+        assert_eq!(c, a);
+        assert!(read_buf(&buf).contains("\"ok\":true"));
+
+        // The same sequence through the core directly is the oracle.
+        let mut oracle = Radar::new(SPEC).unwrap();
+        oracle
+            .command_json(r#"{"cmd":"feed","symbol":"BTCUSDT","event":{"kind":"derivatives","ts":1,"open_interest":100.0,"funding_rate":0.0001,"mark_price":60000.0}}"#)
+            .unwrap();
+        oracle
+            .command_json(r#"{"cmd":"feed","symbol":"BTCUSDT","event":{"kind":"derivatives","ts":2,"open_interest":100.0,"funding_rate":-0.0003,"mark_price":60000.0}}"#)
+            .unwrap();
+        let expected = oracle.command_json(r#"{"cmd":"alerts"}"#).unwrap();
+        assert!(expected.contains("\"symbol\":\"BTCUSDT\""));
+        assert_eq!(command(handle, r#"{"cmd":"alerts"}"#), expected);
+
+        // A double feed would have advanced the symbol one event further.
+        oracle
+            .command_json(r#"{"cmd":"feed","symbol":"BTCUSDT","event":{"kind":"derivatives","ts":2,"open_interest":100.0,"funding_rate":-0.0003,"mark_price":60000.0}}"#)
+            .unwrap();
+        assert_ne!(
+            oracle.command_json(r#"{"cmd":"alerts"}"#).unwrap(),
+            expected
+        );
         unsafe { wickra_radar_free(handle) };
     }
 
