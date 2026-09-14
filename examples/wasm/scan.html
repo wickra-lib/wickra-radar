@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>wickra-radar WASM — scan a perp universe</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; color: #1d1d1d; }
+    h1 { margin-bottom: .25rem; }
+    .meta { color: #666; margin-top: 0; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+    th, td { border: 1px solid #ddd; padding: .5rem .75rem; text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    th { background: #fafafa; }
+    code { background: #f4f4f4; padding: .1rem .25rem; border-radius: .2rem; font-size: .9em; }
+    pre { background: #f6f8fa; padding: .75rem; border-radius: .3rem; overflow-x: auto; }
+    button { padding: .5rem 1rem; }
+    #status { margin-top: 1rem; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>wickra-radar WASM — scan a perp universe</h1>
+  <p class="meta">
+    The same example every other language carries: a two-symbol universe of
+    derivatives events, scanned once with a funding-flip and an open-interest
+    signal. The alert is data, not code, so the report here is the same report
+    the CLI and every other binding return for these events, byte for byte —
+    and the same events fed one at a time through <code>feed</code> followed
+    by <code>alerts</code> return it again.
+  </p>
+
+  <p><button id="go" disabled>Run scan</button></p>
+  <p id="status">Loading WASM module…</p>
+
+  <table id="alerts" hidden>
+    <thead><tr><th>Symbol</th><th>Severity</th><th>Factors</th><th>ts</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <pre id="raw" hidden></pre>
+
+  <script type="module">
+    import init, { Radar, version }
+      from "../../bindings/wasm/pkg/wickra_radar_wasm.js";
+
+    const SPEC = JSON.stringify({
+      symbols: ["AAA", "BBB"],
+      signals: [
+        { kind: "funding_flip", params: [0.0005] },
+        { kind: "oi_delta", params: [2.0, 0.1] },
+      ],
+      threshold: 0.0,
+    });
+
+    const EVENTS = {
+      AAA: [
+        { kind: "derivatives", ts: 1, open_interest: 1.0, funding_rate: 0.0003, mark_price: 50.0 },
+        { kind: "derivatives", ts: 2, open_interest: 1.0, funding_rate: -0.0004, mark_price: 50.0 },
+      ],
+      BBB: [
+        { kind: "derivatives", ts: 1, open_interest: 100.0, funding_rate: 0.0001, mark_price: 10.0 },
+        { kind: "derivatives", ts: 2, open_interest: 110.0, funding_rate: 0.0001, mark_price: 10.2 },
+        { kind: "derivatives", ts: 3, open_interest: 125.0, funding_rate: 0.0001, mark_price: 10.5 },
+      ],
+    };
+
+    const status = document.getElementById("status");
+    const go = document.getElementById("go");
+
+    function run() {
+      // One-shot: the whole universe in a single scan. A fresh radar per run,
+      // so clicking twice does not scan on top of the previous state.
+      const batch = new Radar(SPEC);
+      const scanned = batch.command(JSON.stringify({ cmd: "scan", events: EVENTS }));
+
+      // Streaming: the same events fed as they arrive, then the current alerts.
+      const live = new Radar(SPEC);
+      for (const [symbol, events] of Object.entries(EVENTS)) {
+        for (const event of events) {
+          live.command(JSON.stringify({ cmd: "feed", symbol, event }));
+        }
+      }
+      const streamed = live.command(JSON.stringify({ cmd: "alerts" }));
+      if (streamed !== scanned) {
+        throw new Error("streaming and batch disagree");
+      }
+
+      const report = JSON.parse(scanned);
+      const body = document.querySelector("#alerts tbody");
+      body.replaceChildren();
+      for (const alert of report.alerts) {
+        const tr = document.createElement("tr");
+        const cells = [alert.symbol, alert.severity, JSON.stringify(alert.factors), alert.ts];
+        for (const cell of cells) {
+          const td = document.createElement("td");
+          td.textContent = String(cell);
+          tr.append(td);
+        }
+        body.append(tr);
+      }
+      document.getElementById("alerts").hidden = false;
+
+      const raw = document.getElementById("raw");
+      raw.textContent = JSON.stringify(report, null, 2);
+      raw.hidden = false;
+
+      status.textContent =
+        `${report.alerts.length} alert(s) over ${report.scanned} symbol(s), streaming equals batch — wickra-radar ${version()}.`;
+    }
+
+    await init();
+    status.textContent = `Module ready — wickra-radar ${version()}.`;
+    go.disabled = false;
+    go.addEventListener("click", () => {
+      try {
+        run();
+      } catch (err) {
+        status.textContent = `Error: ${err}`;
+      }
+    });
+  </script>
+</body>
+</html>
