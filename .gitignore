@@ -52,3 +52,10 @@ bindings/r/..Rcheck/
 .env.*
 *.key
 secrets/
+# Staged into src/ by configure at build time; never committed.
+bindings/r/src/wickra_radar.h
+bindings/r/src/libwickra_radar*
+bindings/r/src/wickra_radar_abi.def
+bindings/r/src/wickra-radar-c*
+bindings/r/src/Makevars
+bindings/r/src/symbols.rds

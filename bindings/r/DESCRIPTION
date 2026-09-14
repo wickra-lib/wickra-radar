@@ -13,4 +13,6 @@ Encoding: UTF-8
 NeedsCompilation: yes
 SystemRequirements: the wickra-radar C ABI shared library (WKRADAR_LIB) and its
     header (WKRADAR_INC).
-RoxygenNote: 7.3.2
+Depends: R (>= 4.1)
+Suggests: jsonlite
+Config/roxygen2/version: 8.0.0
