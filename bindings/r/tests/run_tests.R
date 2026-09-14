@@ -76,3 +76,24 @@ if (!is.null(g)) {
 }
 
 cat("wickra-radar R tests passed\n")
+
+## Operating-mode equivalence: one-shot scan and streaming feed_batch + alerts
+## return the same report bytes for every golden spec. The core pins this in
+## Rust; this checks the boundary the R binding crosses. Requires jsonlite.
+stopifnot(requireNamespace("jsonlite", quietly = TRUE))
+g <- golden_dir()
+stopifnot(!is.null(g))
+events_txt <- paste(readLines(file.path(g, "events.json"), warn = FALSE), collapse = "")
+events <- jsonlite::fromJSON(events_txt, simplifyVector = FALSE)
+for (spec_path in list.files(file.path(g, "specs"), pattern = "\\.json$", full.names = TRUE)) {
+  spec <- paste(readLines(spec_path, warn = FALSE), collapse = "")
+  batch <- wkradar_command(wkradar_new(spec), paste0('{"cmd":"scan","events":', events_txt, "}"))
+  streamed <- wkradar_new(spec)
+  for (symbol in names(events)) {
+    cmd <- jsonlite::toJSON(list(cmd = "feed_batch", symbol = symbol, events = events[[symbol]]),
+                            auto_unbox = TRUE, digits = NA)
+    wkradar_command(streamed, cmd)
+  }
+  stopifnot(identical(wkradar_command(streamed, '{"cmd":"alerts"}'), batch))
+}
+cat("wickra-radar R operating modes: streaming equals batch\n")

@@ -8,8 +8,6 @@ this test skips cleanly.
 import json
 import pathlib
 
-import pytest
-
 from wickra_radar import Radar
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
@@ -23,13 +21,22 @@ def _spec_files() -> list[pathlib.Path]:
     return sorted(specs.glob("*.json"))
 
 
-@pytest.mark.skipif(not GOLDEN.exists(), reason="golden fixtures not present yet")
-@pytest.mark.parametrize("spec_path", _spec_files())
-def test_golden_report_is_byte_identical(spec_path: pathlib.Path) -> None:
+def test_golden_reports_are_byte_identical() -> None:
+    # One function over every case rather than a parametrized test: this
+    # module also runs on the Python 3.9 row, which has no test framework
+    # installed (see run_without_pytest.py). A missing corpus is a failure,
+    # not a skip.
+    specs = _spec_files()
+    assert specs, "golden corpus not found"
+    for spec_path in specs:
+        _check_case(spec_path)
+
+
+def _check_case(spec_path: pathlib.Path) -> None:
     events = json.loads((GOLDEN / "events.json").read_text(encoding="utf-8"))
     expected = (GOLDEN / "expected" / f"{spec_path.stem}.json").read_text(
         encoding="utf-8"
     )
     radar = Radar(spec_path.read_text(encoding="utf-8"))
     response = radar.command(json.dumps({"cmd": "scan", "events": events}))
-    assert response == expected.strip()
+    assert response == expected.strip(), spec_path.stem
