@@ -7,11 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-14
+
 ### Security
 
 - **rustls 0.23.45.** RUSTSEC-2026-0285: rustls accepted TLS 1.3 handshake
   messages sent at the wrong encryption level. The lock moves to the
   patched release; nothing in the code changes.
+
+### Fixed
+
+- **The Go module mirror ships.** The v0.1.0 release built every artefact and
+  published crates.io, npm, NuGet and Maven, but the job that assembles
+  `wickra-radar-go` failed its own smoke test before pushing: the test came
+  from a sibling whose constructor takes no arguments, while `New` here
+  parses a spec. It now passes the smallest spec the core accepts, so this
+  release is the first one the Go mirror and the GitHub Release carry.
 
 ## [0.1.0] - 2026-09-14
 
@@ -111,5 +122,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`deny.toml`, `osv-scanner.toml`, `lychee.toml`), lint configuration
   (`clippy.toml`), `repo-metadata.toml`, and dual `MIT OR Apache-2.0` licensing.
 
-[Unreleased]: https://github.com/wickra-lib/wickra-radar/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/wickra-lib/wickra-radar/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/wickra-lib/wickra-radar/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/wickra-lib/wickra-radar/releases/tag/v0.1.0

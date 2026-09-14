@@ -1,6 +1,6 @@
 {
   "name": "wickra-radar-darwin-arm64",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Native binding for wickra-radar (macOS arm64). Installed automatically as an optional dependency of wickra-radar on matching platforms.",
   "main": "wickra-radar.darwin-arm64.node",
   "files": [
