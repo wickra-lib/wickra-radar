@@ -1,4 +1,4 @@
-# Examples
+# Wickra Radar examples
 
 A runnable "scan a perp universe" example in every language. Each one builds a
 Radar from the same spec (a single `funding_flip` signal), scans a two-event
@@ -7,49 +7,130 @@ version and the report. The examples are self-contained: the spec and events are
 inline, so there is no shared `data/` directory to load (the cross-language golden
 fixtures live in [`../golden/`](../golden)).
 
-| Language | Path | Run |
-|----------|------|-----|
-| Rust | [`rust/`](rust/) | `cargo run -p wickra-radar-example` |
-| Python | [`python/scan.py`](python/scan.py) | `pip install wickra-radar && python examples/python/scan.py` |
-| Node.js | [`node/`](node/) | `cd examples/node && npm install && node scan.js` |
-| C / C++ | [`c/`](c/) | see below |
-| Go | [`go/`](go/) | `cd examples/go && go run .` |
-| C# | [`csharp/Scan/`](csharp/Scan/) | `dotnet run --project examples/csharp/Scan` |
-| Java | [`java/Scan.java`](java/Scan.java) | see the header comment |
-| R | [`r/scan.R`](r/scan.R) | `Rscript examples/r/scan.R` |
-| WASM | [`wasm/`](wasm/) | `wasm-pack build bindings/wasm --target web`, serve the repository root, open `examples/wasm/scan.html` |
+## Rust — `examples/rust/`
 
-The native bindings (Python, Node.js) load their own compiled library. The bindings
-that go through the C ABI (Go, C#, Java, R, and the C / C++ example itself) need the
-C ABI library built first:
+As the CI examples job runs it, from the repository root:
 
 ```bash
-cargo build --release -p wickra-radar-c
+cargo run -q --manifest-path examples/rust/Cargo.toml
 ```
 
-## C / C++
+| Example | What it does |
+| --- | --- |
+| `src/main.rs` | A runnable Rust example: scan a perp universe with the native `scan` API and print the report. |
 
-The C example calls the four ABI functions directly; the C++ example goes
-through `bindings/c/include/wickra_radar.hpp`, the header-only hull that owns
-the handle and runs the length-out protocol. `golden_test.c` asserts golden
-parity and operating-mode equivalence over the whole corpus. All three build
-with CMake and run under ctest:
+## C / C++ — `examples/c/`
+
+Build the library first (`cargo build -p wickra-radar-c --release`), then build and run
+the examples via CMake, as the CI C ABI job does:
 
 ```bash
-cargo build --release -p wickra-radar-c
 cmake -S examples/c -B examples/c/build
 cmake --build examples/c/build --config Release
 ctest --test-dir examples/c/build -C Release --output-on-failure
 ```
 
-On Windows the build copies `wickra_radar.dll` next to each executable, since there
-is no rpath.
+| Example | What it does |
+| --- | --- |
+| `scan.c` | A minimal C example: scan a perp universe through the wickra-radar C ABI. |
+| `scan.cpp` | A minimal C++ example: scan a perp universe, then feed the same events one at a time and read the alerts back -- both through the C++ hull. |
 
-## Expected output
+## C# — `examples/csharp/`
 
-Every example prints the version and the report, for example:
+As the CI examples job runs it, from the repository root:
 
-```text
-wickra-radar 0.1.1
-{"alerts":[{"symbol":"AAA","severity":1.0,"factors":{"funding_flip(0.0005)":1.0,"severity":1.0},"ts":2}],"scanned":1}
+```bash
+dotnet run --project examples/csharp/Scan
 ```
+
+| Example | What it does |
+| --- | --- |
+| `Scan/Program.cs` | A runnable .NET example: scan a perp universe through the binding. |
+
+## Go — `examples/go/`
+
+As the CI examples job runs it, from the repository root:
+
+```bash
+cd examples/go && go run .
+```
+
+| Example | What it does |
+| --- | --- |
+| `main.go` | A runnable Go example: scan a perp universe through the binding. |
+
+## R — `examples/r/`
+
+As the CI examples job runs it, from the repository root:
+
+```bash
+R CMD INSTALL bindings/r
+Rscript examples/r/scan.R
+```
+
+| Example | What it does |
+| --- | --- |
+| `scan.R` | A runnable R example: scan a perp universe through the binding. |
+
+## Java — `examples/java/`
+
+As the CI examples job runs it, from the repository root:
+
+```bash
+mvn -f bindings/java/pom.xml -q package -DskipTests
+javac -cp bindings/java/target/classes examples/java/Scan.java -d examples/java/out
+java --enable-native-access=ALL-UNNAMED  -Dnative.lib.dir="$PWD/target/release"  -cp "bindings/java/target/classes:examples/java/out" Scan
+```
+
+| Example | What it does |
+| --- | --- |
+| `Scan.java` | A runnable Java example: scan a perp universe through the binding. |
+
+## Python — `examples/python/`
+
+As the CI examples job runs it, from the repository root:
+
+```bash
+python -m pip install --require-hashes -r .github/requirements/ci-dev-py3.txt
+( cd bindings/python && maturin build --release --out dist )
+python -m pip install --no-index --find-links bindings/python/dist wickra-radar
+python examples/python/scan.py
+```
+
+| Example | What it does |
+| --- | --- |
+| `scan.py` | A runnable Python example: scan a perp universe through the binding. |
+
+## Node.js — `examples/node/`
+
+As the CI examples job runs it, from the repository root:
+
+```bash
+( cd bindings/node && npm install --no-audit --no-fund && npx napi build --platform --release )
+( cd examples/node && npm install --no-audit --no-fund )
+node examples/node/scan.js
+```
+
+| Example | What it does |
+| --- | --- |
+| `scan.js` | A runnable Node.js example: scan a perp universe through the binding. |
+
+## WASM — `examples/wasm/`
+
+Build the WASM package, serve the repository root, and open the page in a browser;
+the module script inside it is what runs (CI parses it with `node --check`):
+
+```bash
+wasm-pack build bindings/wasm --target web
+python -m http.server 8000     # then open http://localhost:8000/examples/wasm/
+```
+
+| Example | What it does |
+| --- | --- |
+| `scan.html` | A runnable example against this binding. |
+
+## Example datasets
+
+The examples are self-contained: the spec and the input are inline, so there is
+no shared `data/` directory to load. The cross-language golden fixtures, which
+every binding is checked against byte for byte, live in [`../golden/`](../golden).
