@@ -41,7 +41,7 @@ This emits `pkg/` with the `.wasm` module and JS glue.
 ## Quick start
 
 ```js
-import init, { Radar, version } from "./pkg/wickra_radar_wasm.js";
+import init, { Radar, version } from "wickra-radar-wasm";
 
 await init();
 
