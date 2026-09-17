@@ -7,7 +7,7 @@ returns the core's compact `command_json` string verbatim, byte equality is the
 exact cross-language check — the same bytes must come out of Rust, Python,
 Node.js, WASM, C, C++, C#, Go, Java and R.
 
-## Files
+## Layout
 
 - **`events.json`** — the shared perp universe: a `{ "<symbol>": [event, …] }`
   map fed to every spec via `{"cmd":"scan","events":<events.json>}`. Five perps,
@@ -24,7 +24,7 @@ Node.js, WASM, C, C++, C#, Go, Java and R.
 - **`expected/<spec>.json`** — the blessed report for each spec, one line of
   compact JSON.
 
-## Regenerating the blessed output
+## Blessing
 
 The expected files are produced by the reference CLI (its JSON output is the same
 `serde_json` serialization as `command_json`), so they can be regenerated after an
