@@ -1576,7 +1576,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
 name = "radar-bench"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "codspeed-criterion-compat",
  "wickra-radar-core",
@@ -2604,9 +2604,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-exchange"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b220f0a78613125e1bb22fcf1fe5e436001f4ffc4e6c531073a8dbc5138483e"
+checksum = "c7dcf3533a43331e332f755a377a5e98bf4d8bac459a793150067fdfba008f2c"
 dependencies = [
  "flate2",
  "futures-util",
@@ -2618,9 +2618,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-exchange-core"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e3b9f03c4f79d94ef9d2e8a59b91ddb22685c07933836dcc9fa7b567f2e5971"
+checksum = "63c62c6c64d143f955b0f36225de3d28b33bc364d9c6c20cc06fd097ac5b4c62"
 dependencies = [
  "base64",
  "hex",
@@ -2638,7 +2638,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "clap",
  "serde_json",
@@ -2647,14 +2647,14 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-c"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "wickra-radar-core",
 ]
 
 [[package]]
 name = "wickra-radar-core"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "proptest",
  "rayon",
@@ -2667,7 +2667,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-example"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "serde_json",
  "wickra-radar-core",
@@ -2675,7 +2675,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-node"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "napi",
  "napi-build",
@@ -2685,7 +2685,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-python"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "pyo3",
  "wickra-radar-core",
@@ -2693,7 +2693,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-wasm"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "wasm-bindgen",
  "wickra-radar-core",
