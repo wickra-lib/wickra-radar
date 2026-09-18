@@ -1,6 +1,6 @@
 {
   "name": "wickra-radar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The data-driven liquidation-cascade radar core: build a Radar from a spec, drive it with commands, read back alert reports. Node bindings powered by Rust.",
   "author": "kingchenc <support@wickra.org>",
   "main": "index.js",
@@ -47,12 +47,12 @@
     "node": ">= 22"
   },
   "optionalDependencies": {
-    "wickra-radar-linux-x64-gnu": "0.1.1",
-    "wickra-radar-linux-arm64-gnu": "0.1.1",
-    "wickra-radar-darwin-x64": "0.1.1",
-    "wickra-radar-darwin-arm64": "0.1.1",
-    "wickra-radar-win32-x64-msvc": "0.1.1",
-    "wickra-radar-win32-arm64-msvc": "0.1.1"
+    "wickra-radar-linux-x64-gnu": "0.1.2",
+    "wickra-radar-linux-arm64-gnu": "0.1.2",
+    "wickra-radar-darwin-x64": "0.1.2",
+    "wickra-radar-darwin-arm64": "0.1.2",
+    "wickra-radar-win32-x64-msvc": "0.1.2",
+    "wickra-radar-win32-arm64-msvc": "0.1.2"
   },
   "scripts": {
     "build": "napi build --platform --release",

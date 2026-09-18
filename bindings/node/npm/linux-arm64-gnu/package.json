@@ -1,6 +1,6 @@
 {
   "name": "wickra-radar-linux-arm64-gnu",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Native binding for wickra-radar (Linux arm64 GNU). Installed automatically as an optional dependency of wickra-radar on matching platforms.",
   "main": "wickra-radar.linux-arm64-gnu.node",
   "files": [
