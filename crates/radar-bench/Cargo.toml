@@ -19,7 +19,7 @@ default = ["parallel"]
 parallel = ["wickra-radar-core/parallel"]
 
 [dependencies]
-wickra-radar-core = { path = "../radar-core", version = "0.1.2", default-features = false }
+wickra-radar-core = { path = "../radar-core", version = "0.1.3", default-features = false }
 
 [dev-dependencies]
 criterion.workspace = true
