@@ -10,7 +10,7 @@
     <AssemblyName>Wickra.Radar</AssemblyName>
 
     <PackageId>Wickra.Radar</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <Authors>kingchenc</Authors>
     <Description>The data-driven liquidation-cascade radar core for .NET over the Wickra C ABI: build a Radar from a spec, drive it with commands, read back a report of alerts.</Description>
     <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
