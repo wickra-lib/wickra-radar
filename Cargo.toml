@@ -46,7 +46,7 @@ categories = ["finance", "command-line-utilities"]
 # crate; it is gone rather than pinned.)
 wickra-core = "1.0"
 wickra-data = "1.0"
-wickra-exchange = "=0.1.6"
+wickra-exchange = "=0.1.7"
 # Workspace-internal crate, referenced by the CLI, bench and bindings.
 wickra-radar-core = { version = "0.1.3", path = "crates/radar-core" }
 # Serialization — the data-driven boundary (spec/command/alert as JSON).
