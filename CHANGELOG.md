@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.4] - 2026-09-24
 
-A follow-up release: the scanner and its bindings are unchanged. It pins wickra-
-exchange 0.1.8, the release that makes exchange's R package build on
+A follow-up release: the scanner and its bindings are unchanged. It pins
+wickra-exchange 0.1.8, the release that makes exchange's R package build on
 r-universe's WebAssembly target and its release pipeline re-runnable.
 
 ### Changed
