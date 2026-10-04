@@ -179,7 +179,7 @@ mod tests {
         let json = r#"{"symbols":["BTCUSDT"],"signals":[{"kind":"oi_delta","params":[20,0.1],"weight":2.0}],"threshold":0.4}"#;
         let spec = RadarSpec::from_json(json).unwrap();
         assert_eq!(spec.signals.len(), 1);
-        assert!(spec.venues.is_empty());
+        assert_eq!(spec.venues, Vec::<String>::new());
         assert!(spec.limit.is_none());
     }
 }
