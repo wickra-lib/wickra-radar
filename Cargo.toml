@@ -45,7 +45,6 @@ categories = ["finance", "command-line-utilities"]
 # (wickra-backtest-core was declared here as a git dependency and used by no
 # crate; it is gone rather than pinned.)
 wickra-core = "1.0"
-wickra-data = "1.0"
 wickra-exchange = "=0.1.8"
 # Workspace-internal crate, referenced by the CLI, bench and bindings.
 wickra-radar-core = { version = "0.1.4", path = "crates/radar-core" }
