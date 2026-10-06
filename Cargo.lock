@@ -1575,7 +1575,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
 name = "radar-bench"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "codspeed-criterion-compat",
  "wickra-radar-core",
@@ -2593,9 +2593,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-core"
-version = "1.0.7"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9de44a7d1a465021f41c4a182463493a4c1053efbbfdde8fa6a3fcbd6dcc4d62"
+checksum = "b62035347edf307f399651a8b5b28b3883fdc17b891605fd92d95cc4b2e1f749"
 dependencies = [
  "rayon",
  "thiserror",
@@ -2604,9 +2604,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-exchange"
-version = "0.1.8"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40a9559b60ee03a798367870346880ab49998c6bcfe02b0099d2058fca509485"
+checksum = "aec4cc2a1df2e56b14b7a845f5cb3b56bf1a6848ccfba2931e225f3083fea737"
 dependencies = [
  "flate2",
  "futures-util",
@@ -2618,9 +2618,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-exchange-core"
-version = "0.1.8"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34ea8c9061f9fdac95f13360864b11bd79899a4f84ee543e1a81b6723ca22e0e"
+checksum = "76e5e1eeaded1a9aef913f5c576367ae787ec5ac9466c4a78139d8a7c0c4e7be"
 dependencies = [
  "base64",
  "hex",
@@ -2638,7 +2638,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "clap",
  "serde_json",
@@ -2647,14 +2647,14 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-c"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "wickra-radar-core",
 ]
 
 [[package]]
 name = "wickra-radar-core"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "proptest",
  "rayon",
@@ -2667,7 +2667,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-example"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "serde_json",
  "wickra-radar-core",
@@ -2675,7 +2675,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-node"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "napi",
  "napi-build",
@@ -2685,7 +2685,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-python"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "pyo3",
  "wickra-radar-core",
@@ -2693,7 +2693,7 @@ dependencies = [
 
 [[package]]
 name = "wickra-radar-wasm"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "wasm-bindgen",
  "wickra-radar-core",
@@ -2701,9 +2701,9 @@ dependencies = [
 
 [[package]]
 name = "wickra-simd"
-version = "1.0.7"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80fc26f4f971339fd785bb1445229f90699c9b954c16202f3a63ee9b9e2f2114"
+checksum = "dd924c51e4871af15651e173fd4d88269455e0b3e9524aa3f24ed72a16bf40e6"
 
 [[package]]
 name = "winapi-util"
