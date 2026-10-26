@@ -4,8 +4,8 @@ title: "wickra-radar"
 abstract: >-
   A liquidation-cascade early-warning radar built on the Wickra core: a
   data-driven RadarSpec is folded over a perp universe (open interest, funding,
-  order-book and liquidation events) with 514 O(1) streaming indicators, scored
-  per signal and aggregated into a RadarAlert, exposed as a JSON-over-C-ABI data
+  order-book and liquidation events), scored per signal and aggregated into a
+  RadarAlert, exposed as a JSON-over-C-ABI data
   API in ten languages.
 type: software
 version: "0.2.0"

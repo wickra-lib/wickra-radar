@@ -1,8 +1,8 @@
 # Wickra Radar — workspace.
 # A liquidation-cascade early-warning radar built as one data-driven core
 # (`wickra-radar-core`): a serde `RadarSpec` is folded over a perp universe (open
-# interest, funding, order-book and liquidation events) with 514 O(1) streaming
-# indicators, scored per signal, aggregated with weights into a `RadarAlert`, and
+# interest, funding, order-book and liquidation events), scored per signal,
+# aggregated with weights into a `RadarAlert`, and
 # scanned in parallel (rayon) or sequentially (the WASM fallback), byte-for-byte
 # identical. The core is exposed as a JSON-over-C-ABI data API in ten languages,
 # mirroring the Wickra tiering: Rust core -> native Python/Node/WASM + a C ABI
