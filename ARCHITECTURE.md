@@ -16,7 +16,7 @@ CORE  crates/radar-core:  RadarSpec (JSON) → Universe<Symbol, SymbolState> (O(
                           → per-signal score → weighted aggregation → RadarAlert
       ▼ data-driven JSON API in ten languages (like screener command_json / backtest run_json)
 BINDINGS  python · node · wasm · c (C-ABI hub) → c / c++ / c# / go / java / r
-CORES  wickra-core (derivatives / liquidation indicators) · wickra-exchange (live perp feeds = event shapes) · wickra-data (Candle, optional)
+CORES  wickra-exchange (live perp feeds = event shapes; the `live` feature) — the signals need no indicator, see below
 ```
 
 Each binding ships the same surface — a `Radar` handle plus
@@ -76,21 +76,23 @@ what makes the golden corpus a **cross-language** parity corpus: the same comman
 produces a byte-identical alert in every language, with no per-language JSON
 reformatting.
 
-## Indicators come from the Wickra core
+## Indicators: a reserved seam
 
-No indicator mathematics lives in this repository. Where a signal needs a derived
-series, `IndicatorSet` resolves each building block from the `wickra-core`
-registry by name and parameters (the same resolver the backtester uses), so
-`wickra-radar` inherits all 514 indicators — including the derivatives,
-liquidation-rate and order-book-imbalance families — and any future additions for
-free.
+No indicator mathematics lives in this repository, and today none is needed:
+the five signals are window reductions of the raw perp event streams, so
+`IndicatorSet` ships no resolver and the core depends on neither `wickra-core`
+nor `wickra-data`. It is where a signal that needs a derived series would
+resolve its building blocks by name and parameters through the
+`wickra-backtest` registry -- the resolver the screener and backtester use,
+the derivatives, liquidation-rate and order-book-imbalance families included --
+bringing those dependencies back with it.
 
 ## Integration with the rest of Wickra
 
 `wickra-radar` sits beside the other Wickra consumers — the terminal, the
-screener, the X-ray and the backtester — over the same core. It depends on
-`wickra-core` (indicators) and on `wickra-exchange`, whose perp derivative,
-order-book and liquidation streams define the shapes of the radar's input events;
-`wickra-data` (`Candle` + CSV) is optional, for price-derived signals. It only
+screener, the X-ray and the backtester — in the same family. Its input events take
+their shapes from `wickra-exchange`'s perp derivative, order-book and liquidation
+streams, which the `live` feature reads directly; the core needs no `wickra-core`
+or `wickra-data` today (see above). It only
 reads and analyses market data — it never places orders and holds no order-secret
 material.
