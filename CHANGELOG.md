@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   releases that fix RUSTSEC-2026-0387 and RUSTSEC-2026-0385 require Rust 1.87.
   Every earlier crypto-bigint 0.7 release is yanked, so a fresh resolve could no
   longer build on 1.86.
+- **`wickra-core` is no longer declared in the workspace.** No crate used the
+  declaration: no signal resolves an indicator yet, and the core reaches the
+  graph only through wickra-exchange. The lockfile does not change.
 
 ### Security
 
