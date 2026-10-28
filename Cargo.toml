@@ -46,7 +46,7 @@ categories = ["finance", "command-line-utilities"]
 # reaches the graph only through wickra-exchange.
 # (wickra-backtest-core was declared here as a git dependency and used by no
 # crate; it is gone rather than pinned.)
-wickra-exchange = "=0.2.0"
+wickra-exchange = "=0.2.1"
 # Workspace-internal crate, referenced by the CLI, bench and bindings.
 wickra-radar-core = { version = "0.2.1", path = "crates/radar-core" }
 # Serialization — the data-driven boundary (spec/command/alert as JSON).
